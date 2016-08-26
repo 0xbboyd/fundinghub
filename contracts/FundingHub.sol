@@ -7,15 +7,20 @@ contract FundingHub {
     // constructor
   }
 
-  function createProject(address owner, uint fundGoal, uint deadline) return (address project){
+  function createProject(address owner, uint fundGoal, uint deadline) returns (address project){
     Project newProject = Project(owner, fundGoal, deadline);
-    register[newProject.address] = newProject;
-    return newProject.address;
+    address projAddress = newProject.getAddress();
+    register[projAddress] = newProject;
+    return projAddress;
   }
 
-  function contribute(address project){
-    if(msg.value == 0) throw;
-    register[project].fund(msg.value);
+  function contribute(address project) returns (bool){
+    if(msg.value == 0) return false;
+    bool success = register[project].fund.value(msg.value);
+    if(!success) {
+      msg.sender.send(msg.value);
+    }
+    return success;
   }
 
   function (){

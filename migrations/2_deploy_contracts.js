@@ -1,5 +1,5 @@
 module.exports = function(deployer) {
-  deployer.deploy(Project);
+  // deployer.deploy(Project);
   deployer.deploy(FundingHub).then(function(instance){
     return FundingHub.deployed().address;
   }).then(function(hubAddress){
